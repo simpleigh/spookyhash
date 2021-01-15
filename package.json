@@ -8,6 +8,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "bindings": "^1.5.0",
     "node-gyp": "^7.1.2"
   }
 }

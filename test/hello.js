@@ -1,3 +1,3 @@
-const spookyhash = require('../build/Release/spookyhash');
+const spookyhash = require('..');
 
 console.log(spookyhash.hello());
