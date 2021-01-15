@@ -1,0 +1,10 @@
+{
+  "name": "spookyhash",
+  "version": "0.1.0",
+  "description": "Node bindings for SpookyHash V2",
+  "main": "index.js",
+  "repository": "https://github.com/simpleigh/spookyhash",
+  "author": "Leigh Simpson <code@simpleigh.com>",
+  "license": "MIT",
+  "private": false
+}
