@@ -3,7 +3,8 @@
     {
       "target_name": "spookyhash",
       "sources": [
-        "src/hello.cpp"
+        "src/spookyhash.cpp",
+        "src/SpookyV2.cpp"
       ],
       "include_dirs": [
         "<!(node -p \"require('node-addon-api').include_dir\")"
