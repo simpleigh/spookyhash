@@ -1,5 +1,12 @@
 # spookyhash
 
+[![npm](https://img.shields.io/npm/v/spookyhash.svg)](https://www.npmjs.com/package/spookyhash)
+[![Build](https://github.com/simpleigh/spookyhash/workflows/Build/badge.svg)](https://github.com/simpleigh/spookyhash/actions?query=branch%3Amaster)
+[![Downloads](https://img.shields.io/npm/dt/spookyhash.svg)](https://www.npmjs.com/package/spookyhash)
+![Node](https://img.shields.io/node/v-lts/spookyhash)]
+[![Issues](https://img.shields.io/github/issues/simpleigh/spookyhash.svg)](https://github.com/simpleigh/spookyhash/issues)
+[![Licence](https://img.shields.io/npm/l/spookyhash)](https://github.com/simpleigh/spookyhash/blob/master/LICENCE.txt)
+
 Node bindings for SpookyHash V2.
 
 ## Table of Contents

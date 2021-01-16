@@ -1,4 +1,4 @@
-name: Build and test addon
+name: Build
 
 on: push
 
