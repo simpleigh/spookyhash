@@ -14,6 +14,7 @@ Node bindings for SpookyHash V2.
 * [`spookyhash`](#spookyhash-1)
   * [Similar projects](#similar-projects)
   * [Class: `Hash`](#class-hash)
+    * [`new Hash([seed1[, seed2]])`](#new-hashseed1-seed2)
     * [`hash.digest()`](#hashdigest)
     * [`hash.update(message)`](#hashupdatemessage)
   * [`spookyhash` module methods and properties](#spookyhash-module-methods-and-properties)

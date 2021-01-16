@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.0
+
+This release adds the `Hash` class which allows hashes to be assembled from
+separate pieces rather than all in one go.
+This represents the last piece of critical functionality from SpookyHashV2.
+
+Other improvements:
+
+* expanded documentation
+* created this changelog
+* enhanced testing
+
 ## 0.2.0
 
 This release adds the `hash64` and `hash32` functions.
