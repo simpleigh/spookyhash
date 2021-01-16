@@ -31,7 +31,6 @@ can configure this by adding a file at `.vscode/settings.json` as follows:
 {
   "C_Cpp.default.includePath": [
     "${workspaceFolder}/**",
-    "${workspaceFolder}/include/**",
     "${workspaceFolder}/node_modules/node-addon-api"
   ]
 }
