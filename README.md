@@ -31,7 +31,7 @@ To install locally:
 
 ```shell
 yarn install
-node test/spookyhash.js
+yarn jest
 ```
 
 To rebuild the Node.JS addon:
@@ -56,4 +56,5 @@ easier to build new bindings using N-API rather than learn the v8 API!
 * [Node.js - C++ addons](https://nodejs.org/docs/latest-v14.x/api/addons.html)
 * [Node.js - N-API](https://nodejs.org/docs/latest-v14.x/api/n-api.html)
 * [`node-addon-api`](https://github.com/nodejs/node-addon-api)
+* [Jest](https://jestjs.io/docs/en/getting-started.html)
 * [`node-spookyhash-v2`](https://github.com/nathankellenicki/node-spookyhash-v2)
