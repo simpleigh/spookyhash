@@ -6,6 +6,13 @@
  */
 
 const { hash128 } = require('..');
+const {
+    NOT_BIGINT,
+    NOT_BUFFER,
+    NOT_INVALID_BIGINT,
+    NOT_NUMBER,
+    NOT_OTHER,
+} = require('./fixtures');
 
 describe('hash128 function', () => {
 
@@ -18,43 +25,28 @@ describe('hash128 function', () => {
         expect(() => hash128()).toThrow();
     });
 
-    const TYPE_TESTS = [
-        ['Boolean', true],
-        ['Function', () => null],
-        ['Infinity', Infinity],
-        ['NaN', NaN],
-        ['null', null],
-        ['Number', 42],
-        ['Object', { }],
-        ['RegExp', /match/],
-        ['String', 'string'],
-        ['Symbol', Symbol()],
-        ['undefined', undefined],
-    ]
-    
     it.each([
-        ['BigInt', 42n],
-        ...TYPE_TESTS,
+        ...NOT_BIGINT,
+        ...NOT_NUMBER,
+        ...NOT_OTHER,
     ])('throws if the message is %s', (name, value) => {
         expect(() => hash128(value)).toThrow();
     });
 
     it.each([
-        ['Buffer', Buffer.from('buffer')],
-        ['negative', -3n],
-        ['fractional', 0.5],
-        ['too large', BigInt('18446744073709551616')],  // 2^64
-        ...TYPE_TESTS,
+        ...NOT_BUFFER,
+        ...NOT_INVALID_BIGINT,
+        ...NOT_NUMBER,
+        ...NOT_OTHER,
     ])('throws if the first seed is %s', (name, value) => {
         expect(() => hash128(Buffer.from('test'), value)).toThrow();
     });
 
     it.each([
-        ['Buffer', Buffer.from('buffer')],
-        ['negative', -3n],
-        ['fractional', 0.5],
-        ['too large', BigInt('18446744073709551616')],  // 2^64
-        ...TYPE_TESTS,
+        ...NOT_BUFFER,
+        ...NOT_INVALID_BIGINT,
+        ...NOT_NUMBER,
+        ...NOT_OTHER,
     ])('throws if the second seed is %s', (name, value) => {
         expect(() => hash128(Buffer.from('test'), 0n, value)).toThrow();
     });
@@ -73,6 +65,11 @@ describe('hash128 function', () => {
             0x60, 0xac, 0xff, 0xd5, 0xa8, 0x98, 0x6f, 0x0b,
         ]);
         expect(hash128(Buffer.from('test'))).toEqual(expected);
+    });
+
+    it('hashes different messages to different values', () => {
+        expect(hash128(Buffer.from('test')))
+            .not.toEqual(hash128(Buffer.from('different')));
     });
 
     it('hashes to a new value if given a first seed', () => {

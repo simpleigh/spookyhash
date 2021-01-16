@@ -80,10 +80,109 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
 }
 
 
+Napi::Value Hash64(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+
+    bool lossless;
+    uint64 seed;
+
+    if (info.Length() < 1 || info.Length() > 2) {
+        Napi::TypeError::New(env, "Wrong number of arguments")
+            .ThrowAsJavaScriptException();
+        return env.Null();
+    }
+
+    if (!info[0].IsBuffer()) {
+        Napi::TypeError::New(env, "message must be a Buffer")
+            .ThrowAsJavaScriptException();
+        return env.Null();
+    }
+
+    if (info.Length() > 1) {
+        if (!info[1].IsBigInt()) {
+            Napi::TypeError::New(env, "seed must be a BigInt")
+                .ThrowAsJavaScriptException();
+            return env.Null();
+        }
+
+        seed = info[1].As<Napi::BigInt>().Uint64Value(&lossless);
+
+        if (!lossless) {
+            Napi::TypeError::New(env, "seed must convert to Uint64")
+                .ThrowAsJavaScriptException();
+            return env.Null();
+        }
+    } else {
+        seed = 0;
+    }
+
+    uint64 hash = SpookyHash::Hash64(
+        info[0].As<Napi::Buffer<void>>().Data(),
+        info[0].As<Napi::Buffer<void>>().Length(),
+        seed
+    );
+
+    Napi::BigInt result = Napi::BigInt::New(env, hash);
+
+    return result;
+}
+
+
+Napi::Value Hash32(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+
+    uint32 seed;
+
+    if (info.Length() < 1 || info.Length() > 2) {
+        Napi::TypeError::New(env, "Wrong number of arguments")
+            .ThrowAsJavaScriptException();
+        return env.Null();
+    }
+
+    if (!info[0].IsBuffer()) {
+        Napi::TypeError::New(env, "message must be a Buffer")
+            .ThrowAsJavaScriptException();
+        return env.Null();
+    }
+
+    if (info.Length() > 1) {
+        if (!info[1].IsNumber()) {
+            Napi::TypeError::New(env, "seed must be a BigInt")
+                .ThrowAsJavaScriptException();
+            return env.Null();
+        }
+
+        seed = info[1].As<Napi::Number>().Uint32Value();
+    } else {
+        seed = 0;
+    }
+
+    uint32 hash = SpookyHash::Hash64(
+        info[0].As<Napi::Buffer<void>>().Data(),
+        info[0].As<Napi::Buffer<void>>().Length(),
+        seed
+    );
+
+    Napi::Number result = Napi::Number::New(env, hash);
+
+    return result;
+}
+
+
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
     exports.Set(
         Napi::String::New(env, "hash128"),
         Napi::Function::New<Hash128>(env)
+    );
+
+    exports.Set(
+        Napi::String::New(env, "hash64"),
+        Napi::Function::New<Hash64>(env)
+    );
+
+    exports.Set(
+        Napi::String::New(env, "hash32"),
+        Napi::Function::New<Hash32>(env)
     );
 
     return exports;

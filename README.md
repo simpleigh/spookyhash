@@ -8,6 +8,10 @@ This package provides Node.js bindings for that library.
 
 ## Usage
 
+### `hash128`
+
+Computes a 128-bit (16-byte) hash of a message that is returned as a `Buffer`.
+
 ```javascript
 const spookyhash = require('spookyhash');
 
@@ -25,19 +29,60 @@ spookyhash.hash128(Buffer.from('Test message'), 3141592653589793238n, 2718281828
   These must be valid unsigned 64-bit integers.
   If not provided these default to `0`.
 
+### `hash64`
+
+Computes a 64-bit (8-byte) hash of a message that is returned as a `BigInt`.
+
+```javascript
+const spookyhash = require('spookyhash');
+
+spookyhash.hash64(Buffer.from('Test Message'));
+// 9120740005544271225n
+
+spookyhash.hash64(Buffer.from('Test message'), 3141592653589793238n);
+// 9667288884877287795n
+```
+
+`hash64(message: Buffer, seed?: BigInt): BigInt`
+
+* `message` - message to hash
+* `seed` - seed for the hash calculation.
+  This must be a valid unsigned 64-bit integer.
+  If not provided this defaults to `0`.
+
+### `hash32`
+
+Computes a 32-bit (4-byte) hash of a message that is returned as a `Number`.
+
+```javascript
+const spookyhash = require('spookyhash');
+
+spookyhash.hash32(Buffer.from('Test Message'));
+// 388570489
+
+spookyhash.hash32(Buffer.from('Test Message'), 42);
+// 4254323322
+```
+
+`hash32(message: Buffer, seed?: Number): Number`
+
+* `message` - message to hash
+* `seed` - seed for the hash calculation.
+  If not provided this defaults to `0`.
+
 ## Development
 
 To install locally:
 
 ```shell
 yarn install
-yarn jest
+yarn test
 ```
 
 To rebuild the Node.JS addon:
 
 ```shell
-yarn node-gyp rebuild
+yarn build
 ```
 
 ## Similar projects
