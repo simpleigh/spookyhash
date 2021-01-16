@@ -1,6 +1,6 @@
 {
   "name": "spookyhash",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Node bindings for SpookyHash V2",
   "keywords": [
     "hash",
