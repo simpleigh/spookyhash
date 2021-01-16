@@ -13,6 +13,30 @@ To rebuild the Node.JS addon:
 yarn build
 ```
 
+## Node headers
+
+To download headers for the current Node version:
+
+```shell
+yarn headers
+```
+
+These are downloaded to the `include` directory for inspection or for use by
+your IDE.
+`node-addon-api` also has a separate set of headers.
+If you're using [Visual Studio Code](https://code.visualstudio.com/) then you
+can configure this by adding a file at `.vscode/settings.json` as follows:
+
+```json
+{
+  "C_Cpp.default.includePath": [
+    "${workspaceFolder}/**",
+    "${workspaceFolder}/include/**",
+    "${workspaceFolder}/node_modules/node-addon-api"
+  ]
+}
+```
+
 ## References
 
 * [Node.js - C++ addons](https://nodejs.org/docs/latest-v14.x/api/addons.html)
