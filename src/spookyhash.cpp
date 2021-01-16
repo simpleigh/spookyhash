@@ -6,7 +6,7 @@
  */
 
 #include <napi.h>
-#include "SpookyV2.h"
+#include "spookyhash.h"
 
 
 Napi::Value Hash128(const Napi::CallbackInfo& info) {
@@ -28,7 +28,7 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
         return env.Null();
     }
 
-    if (info.Length() > 1) {
+    if (info.Length() >= 2) {
         if (!info[1].IsBigInt()) {
             Napi::TypeError::New(env, "first seed must be a BigInt")
                 .ThrowAsJavaScriptException();
@@ -46,7 +46,7 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
         hash1 = 0;
     }
 
-    if (info.Length() > 2) {
+    if (info.Length() >= 3) {
         if (!info[2].IsBigInt()) {
             Napi::TypeError::New(env, "second seed must be a BigInt")
                 .ThrowAsJavaScriptException();
@@ -98,7 +98,7 @@ Napi::Value Hash64(const Napi::CallbackInfo& info) {
         return env.Null();
     }
 
-    if (info.Length() > 1) {
+    if (info.Length() >= 2) {
         if (!info[1].IsBigInt()) {
             Napi::TypeError::New(env, "seed must be a BigInt")
                 .ThrowAsJavaScriptException();
@@ -145,7 +145,7 @@ Napi::Value Hash32(const Napi::CallbackInfo& info) {
         return env.Null();
     }
 
-    if (info.Length() > 1) {
+    if (info.Length() >= 2) {
         if (!info[1].IsNumber()) {
             Napi::TypeError::New(env, "seed must be a BigInt")
                 .ThrowAsJavaScriptException();
@@ -170,6 +170,8 @@ Napi::Value Hash32(const Napi::CallbackInfo& info) {
 
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
+    Hash::Init(env, exports);
+
     exports.Set(
         Napi::String::New(env, "hash128"),
         Napi::Function::New<Hash128>(env)

@@ -59,7 +59,15 @@ describe('hash128 function', () => {
         expect(hash128(Buffer.from('test'))).toHaveLength(16);
     });
 
-    it('hashes to a consistent value', () => {
+    it('hashes an empty buffer to a consistent value', () => {
+        const expected = Buffer.from([
+            0x19, 0x09, 0xf5, 0x6b, 0xfc, 0x06, 0x27, 0x23,
+            0xc7, 0x51, 0xe8, 0xb4, 0x65, 0xee, 0x72, 0x8b,
+        ]);
+        expect(hash128(Buffer.alloc(0))).toEqual(expected);
+    });
+
+    it('hashes a test buffer to a consistent value', () => {
         const expected = Buffer.from([
             0x75, 0x8b, 0x0d, 0xec, 0xbc, 0xe8, 0x01, 0x7b,
             0x60, 0xac, 0xff, 0xd5, 0xa8, 0x98, 0x6f, 0x0b,

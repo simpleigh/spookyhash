@@ -4,6 +4,7 @@
       "target_name": "spookyhash",
       "sources": [
         "src/spookyhash.cpp",
+        "src/Hash.cpp",
         "src/SpookyV2.cpp"
       ],
       "include_dirs": [

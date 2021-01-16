@@ -10,7 +10,7 @@
  * @copyright Copyright 2020 Leigh Simpson. All rights reserved.
  */
 
-const { hash32, hash64, hash128 } = require('..');
+const { Hash, hash32, hash64, hash128 } = require('..');
 
 describe('SpookyHash functions', () => {
 
@@ -88,18 +88,18 @@ describe('SpookyHash functions', () => {
         0x27c2e04b, 0x0b7523bd, 0x07305776, 0xc6be7503, 0x918fa7c9, 0xaf2e2cd9, 0x82046f8e, 0xcc1c8250,
     ];
 
-    const TEST_MESSAGE = Buffer.allocUnsafe(SUBSTRING_HASHES.length);
+    const VALUES_TEST_MESSAGE = Buffer.allocUnsafe(SUBSTRING_HASHES.length);
     for (let index = 0; index < SUBSTRING_HASHES.length; index += 1) {
-        TEST_MESSAGE.writeUInt8((index + 128) % 256, index);
+        VALUES_TEST_MESSAGE.writeUInt8((index + 128) % 256, index);
     }
 
     it('hashes a message to the correct value', () => {
-        expect(hash32(TEST_MESSAGE)).toBe(0xdf8499ae);
+        expect(hash32(VALUES_TEST_MESSAGE)).toBe(0xdf8499ae);
     });
 
     it('hashes message substrings to the correct values', () => {
         SUBSTRING_HASHES.forEach((expected, index) => {
-            expect(hash32(TEST_MESSAGE.slice(0, index))).toBe(expected);
+            expect(hash32(VALUES_TEST_MESSAGE.slice(0, index))).toBe(expected);
         });
     });
 
@@ -143,4 +143,48 @@ describe('SpookyHash functions', () => {
         }
     });
 
+    // original was 1024 bytes but that runs too slowly
+    const PIECES_TEST_MESSAGE = Buffer.allocUnsafe(256);
+    for (let index = 0; index < PIECES_TEST_MESSAGE.length; index += 1) {
+        PIECES_TEST_MESSAGE.writeUInt8(index % 256, index);
+    }
+
+    it('hashes correctly when passing a message as one piece', () => {
+        for (
+            let messageLength = 0;
+            messageLength <= PIECES_TEST_MESSAGE.length;
+            messageLength += 1
+        ) {
+            const message = PIECES_TEST_MESSAGE.slice(0, messageLength);
+            const hash = new Hash(1n, 2n);
+            hash.update(message);
+
+            expect(hash.digest()).toStrictEqual(hash128(message, 1n, 2n));
+        }
+    });
+
+    it('hashes correctly when passing all possible sets of two pieces', () => {
+        for (
+            let messageLength = 0;
+            messageLength <= PIECES_TEST_MESSAGE.length;
+            messageLength += 1
+        ) {
+            const message = PIECES_TEST_MESSAGE.slice(0, messageLength);
+
+            for (
+                let firstLength = 0;
+                firstLength <= messageLength;
+                firstLength += 1
+            ) {
+                const first = message.slice(0, firstLength);
+                const last = message.slice(firstLength);
+
+                const hash = new Hash(1n, 2n);
+                hash.update(first);
+                hash.update(last);
+
+                expect(hash.digest()).toStrictEqual(hash128(message, 1n, 2n));
+            }
+        }
+    });
 });
