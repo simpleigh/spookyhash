@@ -2,11 +2,22 @@
   "name": "spookyhash",
   "version": "0.1.0",
   "description": "Node bindings for SpookyHash V2",
+  "keywords": [
+    "hash",
+    "hashing",
+    "spookyhash"
+  ],
   "main": "index.js",
-  "repository": "https://github.com/simpleigh/spookyhash",
   "author": "Leigh Simpson <code@simpleigh.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/simpleigh/spookyhash.git"
+  },
+  "bugs": {
+    "url": "https://github.com/simpleigh/spookyhash/issues"
+  },
+  "homepage": "https://github.com/simpleigh/spookyhash",
   "license": "MIT",
-  "private": false,
   "dependencies": {
     "bindings": "^1.5.0",
     "node-addon-api": "^3.1.0",
