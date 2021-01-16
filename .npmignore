@@ -1,0 +1,6 @@
+/.github/
+/.vscode/
+/build/
+/include/
+/node_modules/
+yarn.lock
