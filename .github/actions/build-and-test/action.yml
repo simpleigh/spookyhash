@@ -1,0 +1,16 @@
+name: Build and test
+
+description: Installs dependencies, builds and tests the addon
+
+runs:
+
+  using: composite
+
+  steps:
+    - name: Install dependencies and build
+      run: yarn install --frozen-lockfile
+      shell: bash
+
+    - name: Run tests
+      run: yarn jest
+      shell: bash
