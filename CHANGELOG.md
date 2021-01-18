@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0
+
+This release fixes #1 (Cannot build library on MacOS).
+CI tests now run on MacOS as well as Ubuntu in order to prevent this recurring.
+
 ## 1.0.0
 
 This release adds the `Hash` class which allows hashes to be assembled from
