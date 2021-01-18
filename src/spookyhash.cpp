@@ -65,16 +65,16 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
     }
 
     SpookyHash::Hash128(
-        info[0].As<Napi::Buffer<void>>().Data(),
-        info[0].As<Napi::Buffer<void>>().Length(),
+        info[0].As<Napi::Buffer<uint8>>().Data(),
+        info[0].As<Napi::Buffer<uint8>>().Length(),
         &hash1,
         &hash2
     );
 
-    Napi::Buffer<void> result = Napi::Buffer<void>::New(env, 16);
+    Napi::Buffer<uint64> result = Napi::Buffer<uint64>::New(env, 2);
 
-    memcpy(result.Data(), &hash1, 8);
-    memcpy(result.Data() + 8, &hash2, 8);
+    memcpy(result.Data(), &hash1, sizeof(uint64));
+    memcpy(result.Data() + 1, &hash2, sizeof(uint64));
 
     return result;
 }
@@ -117,8 +117,8 @@ Napi::Value Hash64(const Napi::CallbackInfo& info) {
     }
 
     uint64 hash = SpookyHash::Hash64(
-        info[0].As<Napi::Buffer<void>>().Data(),
-        info[0].As<Napi::Buffer<void>>().Length(),
+        info[0].As<Napi::Buffer<uint8>>().Data(),
+        info[0].As<Napi::Buffer<uint8>>().Length(),
         seed
     );
 
@@ -158,8 +158,8 @@ Napi::Value Hash32(const Napi::CallbackInfo& info) {
     }
 
     uint32 hash = SpookyHash::Hash64(
-        info[0].As<Napi::Buffer<void>>().Data(),
-        info[0].As<Napi::Buffer<void>>().Length(),
+        info[0].As<Napi::Buffer<uint8>>().Data(),
+        info[0].As<Napi::Buffer<uint8>>().Length(),
         seed
     );
 
