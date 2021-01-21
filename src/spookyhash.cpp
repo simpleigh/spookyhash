@@ -13,8 +13,8 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
     bool lossless;
-    uint64 hash1;
-    uint64 hash2;
+    uint64 hash1 = 0;
+    uint64 hash2 = 0;
 
     if (info.Length() < 1 || info.Length() > 3) {
         Napi::TypeError::New(env, "Wrong number of arguments")
@@ -42,8 +42,6 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
                 .ThrowAsJavaScriptException();
             return env.Null();
         }
-    } else {
-        hash1 = 0;
     }
 
     if (info.Length() >= 3) {
@@ -60,8 +58,6 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
                 .ThrowAsJavaScriptException();
             return env.Null();
         }
-    } else {
-        hash2 = 0;
     }
 
     SpookyHash::Hash128(
@@ -84,7 +80,7 @@ Napi::Value Hash64(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
     bool lossless;
-    uint64 seed;
+    uint64 seed = 0;
 
     if (info.Length() < 1 || info.Length() > 2) {
         Napi::TypeError::New(env, "Wrong number of arguments")
@@ -112,8 +108,6 @@ Napi::Value Hash64(const Napi::CallbackInfo& info) {
                 .ThrowAsJavaScriptException();
             return env.Null();
         }
-    } else {
-        seed = 0;
     }
 
     uint64 hash = SpookyHash::Hash64(
@@ -131,7 +125,7 @@ Napi::Value Hash64(const Napi::CallbackInfo& info) {
 Napi::Value Hash32(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
-    uint32 seed;
+    uint32 seed = 0;
 
     if (info.Length() < 1 || info.Length() > 2) {
         Napi::TypeError::New(env, "Wrong number of arguments")
@@ -153,8 +147,6 @@ Napi::Value Hash32(const Napi::CallbackInfo& info) {
         }
 
         seed = info[1].As<Napi::Number>().Uint32Value();
-    } else {
-        seed = 0;
     }
 
     uint32 hash = SpookyHash::Hash64(

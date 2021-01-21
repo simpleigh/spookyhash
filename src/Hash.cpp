@@ -30,8 +30,8 @@ Hash::Hash(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Hash>(info) {
     Napi::Env env = info.Env();
 
     bool lossless;
-    uint64 seed1;
-    uint64 seed2;
+    uint64 seed1 = 0;
+    uint64 seed2 = 0;
 
     if (info.Length() > 2) {
         Napi::TypeError::New(env, "Wrong number of arguments")
@@ -53,8 +53,6 @@ Hash::Hash(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Hash>(info) {
                 .ThrowAsJavaScriptException();
             return;
         }
-    } else {
-        seed1 = 0;
     }
 
     if (info.Length() >= 2) {
@@ -71,8 +69,6 @@ Hash::Hash(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Hash>(info) {
                 .ThrowAsJavaScriptException();
             return;
         }
-    } else {
-        seed2 = 0;
     }
 
     m_state.Init(seed1, seed2);
