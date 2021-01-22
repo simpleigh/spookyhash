@@ -22,8 +22,10 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
     if (info.Length() >= 2) {
         if (info[1].IsBuffer()) {
             LOAD_SEED_BUFFER(1, hash1, env.Null());
+#if NAPI_VERSION > 5
         } else if (info[1].IsBigInt()) {
             LOAD_SEED_BIGINT(1, hash1, env.Null());
+#endif
         } else {
             Napi::TypeError::New(env, "first seed must be a BigInt or Buffer")
                 .ThrowAsJavaScriptException();
@@ -34,8 +36,10 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
     if (info.Length() >= 3) {
         if (info[2].IsBuffer()) {
             LOAD_SEED_BUFFER(2, hash2, env.Null());
+#if NAPI_VERSION > 5
         } else if (info[2].IsBigInt()) {
             LOAD_SEED_BIGINT(2, hash2, env.Null());
+#endif
         } else {
             Napi::TypeError::New(env, "second seed must be a BigInt or Buffer")
                 .ThrowAsJavaScriptException();
@@ -59,6 +63,7 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
 }
 
 
+#if NAPI_VERSION > 5
 Napi::Value Hash64(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
@@ -90,6 +95,7 @@ Napi::Value Hash64(const Napi::CallbackInfo& info) {
 
     return result;
 }
+#endif
 
 
 Napi::Value Hash32(const Napi::CallbackInfo& info) {
@@ -125,6 +131,15 @@ Napi::Value Hash32(const Napi::CallbackInfo& info) {
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
     Hash::Init(env, exports);
+
+    exports.Set(
+        Napi::String::New(env, "hasBigInt"),
+#if NAPI_VERSION > 5
+        Napi::Boolean::New(env, true)
+#else
+        Napi::Boolean::New(env, false)
+#endif
+    );
 
     exports.Set(
         Napi::String::New(env, "hash128"),

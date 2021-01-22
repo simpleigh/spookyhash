@@ -5,7 +5,7 @@
  * @copyright Copyright 2020 Leigh Simpson. All rights reserved.
  */
 
-const { Hash, hash128 } = require('..');
+const { hasBigInt, Hash, hash128 } = require('..');
 const {
     NOT_BIGINT,
     NOT_BUFFER,
@@ -174,50 +174,52 @@ describe('Hash class', () => {
         });
     });
 
-    describe('BigInt seed', () => {
-        it('hashes to a new value if given a first seed', () => {
-            const hash1 = new Hash(42n);
-            const hash2 = new Hash();
+    if (hasBigInt) {
+        describe('BigInt seed', () => {
+            it('hashes to a new value if given a first seed', () => {
+                const hash1 = new Hash(42n);
+                const hash2 = new Hash();
 
-            hash1.update(message);
-            hash2.update(message);
+                hash1.update(message);
+                hash2.update(message);
 
-            expect(hash1.digest()).not.toEqual(hash2.digest());
+                expect(hash1.digest()).not.toEqual(hash2.digest());
+            });
+
+            it('hashes to a new value if given a second seed', () => {
+                const hash1 = new Hash(42n, 43n);
+                const hash2 = new Hash(42n);
+
+                hash1.update(message);
+                hash2.update(message);
+
+                expect(hash1.digest()).not.toEqual(hash2.digest());
+            });
+
+            it('uses 0 as a default value for both seeds', () => {
+                const hash1 = new Hash(0n, 0n);
+                const hash2 = new Hash();
+
+                hash1.update(message);
+                hash2.update(message);
+
+                expect(hash1.digest()).toEqual(hash2.digest());
+            });
         });
 
-        it('hashes to a new value if given a second seed', () => {
-            const hash1 = new Hash(42n, 43n);
-            const hash2 = new Hash(42n);
-
-            hash1.update(message);
-            hash2.update(message);
-
-            expect(hash1.digest()).not.toEqual(hash2.digest());
-        });
-
-        it('uses 0 as a default value for both seeds', () => {
-            const hash1 = new Hash(0n, 0n);
-            const hash2 = new Hash();
+        it('hashes to the same value regardless of seed type', () => {
+            const hash1 = new Hash(
+                Buffer.from([0x75, 0x8b, 0x0d, 0xec, 0xbc, 0xe8, 0x01, 0x7b]),
+                Buffer.from([0x60, 0xac, 0xff, 0xd5, 0xa8, 0x98, 0x6f, 0x0b]),
+            );
+            const hash2 = new Hash(8863621439753653109n, 824045107744320608n);
 
             hash1.update(message);
             hash2.update(message);
 
             expect(hash1.digest()).toEqual(hash2.digest());
         });
-    });
-
-    it('hashes to the same value regardless of seed type', () => {
-        const hash1 = new Hash(
-            Buffer.from([0x75, 0x8b, 0x0d, 0xec, 0xbc, 0xe8, 0x01, 0x7b]),
-            Buffer.from([0x60, 0xac, 0xff, 0xd5, 0xa8, 0x98, 0x6f, 0x0b]),
-        );
-        const hash2 = new Hash(8863621439753653109n, 824045107744320608n);
-
-        hash1.update(message);
-        hash2.update(message);
-
-        expect(hash1.digest()).toEqual(hash2.digest());
-    });
+    }
 
     it('hashes to a new value if given more data', () => {
         const hash = new Hash();

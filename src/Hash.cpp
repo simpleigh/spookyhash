@@ -15,12 +15,13 @@ Napi::Object Hash::Init(Napi::Env env, Napi::Object exports) {
         InstanceMethod<&Hash::Update>("update"),
     });
 
+#if NAPI_VERSION > 5
     Napi::FunctionReference *constructor = new Napi::FunctionReference();
-
     *constructor = Napi::Persistent(func);
-    exports.Set("Hash", func);
-
     env.SetInstanceData<Napi::FunctionReference>(constructor);
+#endif
+
+    exports.Set("Hash", func);
 
     return exports;
 }
@@ -38,8 +39,10 @@ Hash::Hash(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Hash>(info) {
     if (info.Length() >= 1) {
         if (info[0].IsBuffer()) {
             LOAD_SEED_BUFFER(0, seed1, );
+#if NAPI_VERSION > 5
         } else if (info[0].IsBigInt()) {
             LOAD_SEED_BIGINT(0, seed1, );
+#endif
         } else {
             Napi::TypeError::New(env, "first seed must be a BigInt or Buffer")
                 .ThrowAsJavaScriptException();
@@ -50,8 +53,10 @@ Hash::Hash(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Hash>(info) {
     if (info.Length() >= 2) {
         if (info[1].IsBuffer()) {
             LOAD_SEED_BUFFER(1, seed2, );
+#if NAPI_VERSION > 5
         } else if (info[1].IsBigInt()) {
             LOAD_SEED_BIGINT(1, seed2, );
+#endif
         } else {
             Napi::TypeError::New(env, "second seed must be a BigInt or Buffer")
                 .ThrowAsJavaScriptException();
