@@ -15,6 +15,8 @@ const {
 
 describe('hash32 function', () => {
 
+    const message = Buffer.from('test');
+
     it('exists', () => {
         expect(hash32).toBeDefined();
         expect(typeof hash32).toBe('function');
@@ -37,34 +39,31 @@ describe('hash32 function', () => {
         ...NOT_BUFFER,
         ...NOT_OTHER,
     ])('throws if the seed is %s', (name, value) => {
-        expect(() => hash32(Buffer.from('test'), value)).toThrow();
+        expect(() => hash32(message, value)).toThrow();
     });
 
     it('throws if given too many parameters', () => {
-        expect(() => hash32(Buffer.from('test'), 0, 'extra')).toThrow();
+        expect(() => hash32(message, 0, 'extra')).toThrow();
     });
 
     it('returns a number', () => {
-        expect(typeof hash32(Buffer.from('test'))).toBe('number');
+        expect(typeof hash32(message)).toBe('number');
     });
 
     it('hashes to a consistent value', () => {
-        expect(hash32(Buffer.from('test'))).toEqual(3960310645);
+        expect(hash32(message)).toEqual(3960310645);
     });
 
     it('hashes different messages to different values', () => {
-        expect(hash32(Buffer.from('test')))
-            .not.toEqual(hash32(Buffer.from('different')));
+        expect(hash32(message)).not.toEqual(hash32(Buffer.from('different')));
     });
 
     it('hashes to a new value if given a seed', () => {
-        expect(hash32(Buffer.from('test'), 42))
-            .not.toEqual(hash32(Buffer.from('test')));
+        expect(hash32(message, 42)).not.toEqual(hash32(message));
     });
 
     it('uses 0 as a default value for the seed', () => {
-        expect(hash32(Buffer.from('test'), 0))
-            .toEqual(hash32(Buffer.from('test')));
+        expect(hash32(message, 0)).toEqual(hash32(message));
     });
 
 });

@@ -16,6 +16,8 @@ const {
 
 describe('Hash class', () => {
 
+    const message = Buffer.from('test');
+
     it('exists', () => {
         expect(Hash).toBeDefined();
         expect(typeof Hash).toBe('function');
@@ -114,14 +116,14 @@ describe('Hash class', () => {
             0x60, 0xac, 0xff, 0xd5, 0xa8, 0x98, 0x6f, 0x0b,
         ]);
         const hash = new Hash();
-        hash.update(Buffer.from('test'));
+        hash.update(message);
 
         expect(hash.digest()).toEqual(expected);
     });
 
     it('returns the same test buffer hash when called again', () => {
         const hash = new Hash();
-        hash.update(Buffer.from('test'));
+        hash.update(message);
         const result = hash.digest();
 
         expect(hash.digest()).toEqual(result);
@@ -131,7 +133,7 @@ describe('Hash class', () => {
         const hash1 = new Hash();
         const hash2 = new Hash();
 
-        hash1.update(Buffer.from('test'));
+        hash1.update(message);
         hash2.update(Buffer.from('different'));
 
         expect(hash1.digest()).not.toEqual(hash2.digest());
@@ -141,8 +143,8 @@ describe('Hash class', () => {
         const hash1 = new Hash(42n);
         const hash2 = new Hash();
 
-        hash1.update(Buffer.from('test'));
-        hash2.update(Buffer.from('test'));
+        hash1.update(message);
+        hash2.update(message);
 
         expect(hash1.digest()).not.toEqual(hash2.digest());
     });
@@ -151,8 +153,8 @@ describe('Hash class', () => {
         const hash1 = new Hash(42n, 43n);
         const hash2 = new Hash(42n);
 
-        hash1.update(Buffer.from('test'));
-        hash2.update(Buffer.from('test'));
+        hash1.update(message);
+        hash2.update(message);
 
         expect(hash1.digest()).not.toEqual(hash2.digest());
     });
@@ -161,8 +163,8 @@ describe('Hash class', () => {
         const hash1 = new Hash(0n, 0n);
         const hash2 = new Hash();
 
-        hash1.update(Buffer.from('test'));
-        hash2.update(Buffer.from('test'));
+        hash1.update(message);
+        hash2.update(message);
 
         expect(hash1.digest()).toEqual(hash2.digest());
     });
@@ -174,15 +176,15 @@ describe('Hash class', () => {
         );
         const hash2 = new Hash(8863621439753653109n, 824045107744320608n);
 
-        hash1.update(Buffer.from('test'));
-        hash2.update(Buffer.from('test'));
+        hash1.update(message);
+        hash2.update(message);
 
         expect(hash1.digest()).toEqual(hash2.digest());
     });
 
     it('hashes to a new value if given more data', () => {
         const hash = new Hash();
-        hash.update(Buffer.from('test'));
+        hash.update(message);
         const result = hash.digest();
         hash.update(Buffer.from('new'));
 

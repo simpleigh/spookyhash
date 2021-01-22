@@ -16,6 +16,8 @@ const {
 
 describe('hash64 function', () => {
 
+    const message = Buffer.from('test');
+
     it('exists', () => {
         expect(hash64).toBeDefined();
         expect(typeof hash64).toBe('function');
@@ -39,38 +41,34 @@ describe('hash64 function', () => {
         ...NOT_NUMBER,
         ...NOT_OTHER,
     ])('throws if the seed is %s', (name, value) => {
-        expect(() => hash64(Buffer.from('test'), value)).toThrow();
+        expect(() => hash64(message, value)).toThrow();
     });
 
     it('throws if given too many parameters', () => {
-        expect(() => hash64(Buffer.from('test'), 0n, 'extra')).toThrow();
+        expect(() => hash64(message, 0n, 'extra')).toThrow();
     });
 
     it('returns a BigInt', () => {
-        expect(typeof hash64(Buffer.from('test'))).toBe('bigint');
+        expect(typeof hash64(message)).toBe('bigint');
     });
 
     it('hashes to a consistent value', () => {
-        expect(hash64(Buffer.from('test'))).toEqual(8863621439753653109n);
+        expect(hash64(message)).toEqual(8863621439753653109n);
     });
 
     it('hashes different messages to different values', () => {
-        expect(hash64(Buffer.from('test')))
-            .not.toEqual(hash64(Buffer.from('different')));
+        expect(hash64(message)).not.toEqual(hash64(Buffer.from('different')));
     });
 
     it('hashes to a new value if given a seed', () => {
-        expect(hash64(Buffer.from('test'), 42n))
-            .not.toEqual(hash64(Buffer.from('test')));
+        expect(hash64(message, 42n)).not.toEqual(hash64(message));
     });
 
     it('uses 0 as a default value for the seed', () => {
-        expect(hash64(Buffer.from('test'), 0n))
-            .toEqual(hash64(Buffer.from('test')));
+        expect(hash64(message, 0n)).toEqual(hash64(message));
     });
 
     it('accepts Buffers as seeds', () => {
-        const message = Buffer.from('test');
         const withBuffer = hash64(
             message,
             Buffer.from([0x75, 0x8b, 0x0d, 0xec, 0xbc, 0xe8, 0x01, 0x7b]),
