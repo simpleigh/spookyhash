@@ -94,9 +94,10 @@ console.log(hash.digest().toString('hex'));
 
 ### `new Hash([seed1[, seed2]])`
 
-* `seed1`, `seed2` [`<BigInt>`] Seeds for the hash calculation.
-  These must be unsigned, 64-bit integers.
-  If not provided then a default of `0n` will be used.
+* `seed1`, `seed2` [`<BigInt>`] | [`<Buffer>`] Seeds for the hash calculation.
+  If passed as a `BigInt` a seed must be an unsigned, 64-bit integer.
+  If passed as a `Buffer` a seed must be 8 bytes in length.
+  If not provided then a default of `0` will be used.
 
 ```javascript
 const hash1 = new spookyhash.Hash();
@@ -133,9 +134,10 @@ This can be called many times with new data as it is streamed.
 
 * `message` [`<Buffer>`] The message to hash
 
-* `seed1`, `seed2` [`<BigInt>`] Seeds for the hash calculation.
-  These must be unsigned, 64-bit integers.
-  If not provided then a default of `0n` will be used.
+* `seed1`, `seed2` [`<BigInt>`] | [`<Buffer>`] Seeds for the hash calculation.
+  If passed as a `BigInt` a seed must be an unsigned, 64-bit integer.
+  If passed as a `Buffer` a seed must be 8 bytes in length.
+  If not provided then a default of `0` will be used.
 
 * Returns: [`<Buffer>`]
 
@@ -155,9 +157,10 @@ spookyhash.hash128(Buffer.from('Test message'), 3141592653589793238n, 2718281828
 
 * `message` [`<Buffer>`] The message to hash
 
-* `seed` [`<BigInt>`] Seed for the hash calculation.
-  This must be an unsigned, 64-bit integer.
-  If not provided then a default of `0n` will be used.
+* `seed` [`<BigInt>`] | [`<Buffer>`] Seed for the hash calculation.
+  If passed as a `BigInt` a seed must be an unsigned, 64-bit integer.
+  If passed as a `Buffer` a seed must be 8 bytes in length.
+  If not provided then a default of `0` will be used.
 
 * Returns: [`<BigInt>`].
 

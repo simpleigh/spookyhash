@@ -12,7 +12,6 @@
 Napi::Value Hash128(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
-    bool lossless;
     uint64 hash1 = 0;
     uint64 hash2 = 0;
 
@@ -21,32 +20,24 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
     CHECK_MESSAGE(env.Null());
 
     if (info.Length() >= 2) {
-        if (!info[1].IsBigInt()) {
-            Napi::TypeError::New(env, "first seed must be a BigInt")
-                .ThrowAsJavaScriptException();
-            return env.Null();
-        }
-
-        hash1 = info[1].As<Napi::BigInt>().Uint64Value(&lossless);
-
-        if (!lossless) {
-            Napi::TypeError::New(env, "first seed must convert to Uint64")
+        if (info[1].IsBuffer()) {
+            LOAD_SEED_BUFFER(1, hash1, env.Null());
+        } else if (info[1].IsBigInt()) {
+            LOAD_SEED_BIGINT(1, hash1, env.Null());
+        } else {
+            Napi::TypeError::New(env, "first seed must be a BigInt or Buffer")
                 .ThrowAsJavaScriptException();
             return env.Null();
         }
     }
 
     if (info.Length() >= 3) {
-        if (!info[2].IsBigInt()) {
-            Napi::TypeError::New(env, "second seed must be a BigInt")
-                .ThrowAsJavaScriptException();
-            return env.Null();
-        }
-
-        hash2 = info[2].As<Napi::BigInt>().Uint64Value(&lossless);
-
-        if (!lossless) {
-            Napi::TypeError::New(env, "second seed must convert to Uint64")
+        if (info[2].IsBuffer()) {
+            LOAD_SEED_BUFFER(2, hash2, env.Null());
+        } else if (info[2].IsBigInt()) {
+            LOAD_SEED_BIGINT(2, hash2, env.Null());
+        } else {
+            Napi::TypeError::New(env, "second seed must be a BigInt or Buffer")
                 .ThrowAsJavaScriptException();
             return env.Null();
         }
@@ -71,7 +62,6 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
 Napi::Value Hash64(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
-    bool lossless;
     uint64 seed = 0;
 
     CHECK_ARGUMENT_COUNT(1, 2, env.Null());
@@ -79,16 +69,12 @@ Napi::Value Hash64(const Napi::CallbackInfo& info) {
     CHECK_MESSAGE(env.Null());
 
     if (info.Length() >= 2) {
-        if (!info[1].IsBigInt()) {
-            Napi::TypeError::New(env, "seed must be a BigInt")
-                .ThrowAsJavaScriptException();
-            return env.Null();
-        }
-
-        seed = info[1].As<Napi::BigInt>().Uint64Value(&lossless);
-
-        if (!lossless) {
-            Napi::TypeError::New(env, "seed must convert to Uint64")
+        if (info[1].IsBuffer()) {
+            LOAD_SEED_BUFFER(1, seed, env.Null());
+        } else if (info[1].IsBigInt()) {
+            LOAD_SEED_BIGINT(1, seed, env.Null());
+        } else {
+            Napi::TypeError::New(env, "first seed must be a BigInt or Buffer")
                 .ThrowAsJavaScriptException();
             return env.Null();
         }

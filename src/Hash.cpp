@@ -36,32 +36,24 @@ Hash::Hash(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Hash>(info) {
     CHECK_ARGUMENT_COUNT(0, 2, );
 
     if (info.Length() >= 1) {
-        if (!info[0].IsBigInt()) {
-            Napi::TypeError::New(env, "first seed must be a BigInt")
-                .ThrowAsJavaScriptException();
-            return;
-        }
-
-        seed1 = info[0].As<Napi::BigInt>().Uint64Value(&lossless);
-
-        if (!lossless) {
-            Napi::TypeError::New(env, "first seed must convert to Uint64")
+        if (info[0].IsBuffer()) {
+            LOAD_SEED_BUFFER(0, seed1, );
+        } else if (info[0].IsBigInt()) {
+            LOAD_SEED_BIGINT(0, seed1, );
+        } else {
+            Napi::TypeError::New(env, "first seed must be a BigInt or Buffer")
                 .ThrowAsJavaScriptException();
             return;
         }
     }
 
     if (info.Length() >= 2) {
-        if (!info[1].IsBigInt()) {
-            Napi::TypeError::New(env, "second seed must be a BigInt")
-                .ThrowAsJavaScriptException();
-            return;
-        }
-
-        seed2 = info[1].As<Napi::BigInt>().Uint64Value(&lossless);
-
-        if (!lossless) {
-            Napi::TypeError::New(env, "second seed must convert to Uint64")
+        if (info[1].IsBuffer()) {
+            LOAD_SEED_BUFFER(1, seed2, );
+        } else if (info[1].IsBigInt()) {
+            LOAD_SEED_BIGINT(1, seed2, );
+        } else {
+            Napi::TypeError::New(env, "second seed must be a BigInt or Buffer")
                 .ThrowAsJavaScriptException();
             return;
         }

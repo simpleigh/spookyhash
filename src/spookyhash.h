@@ -56,3 +56,37 @@ Napi::Object Init(Napi::Env env, Napi::Object exports);
             .ThrowAsJavaScriptException(); \
         return retval; \
     }
+
+
+/**
+ * Loads a BigInt into a seed variable
+ * @param {size_t}  arg     Argument number to load
+ * @param {*uint64} seed    Name of seed variable to store value
+ * @param {?}       retval  Value to return from the function
+ */
+#define LOAD_SEED_BIGINT(arg, seed, retval) { \
+    bool lossless; \
+    (seed) = info[(arg)].As<Napi::BigInt>().Uint64Value(&lossless); \
+    if (!lossless) { \
+        Napi::TypeError::New(env, "BigInt seed must convert to Uint64") \
+            .ThrowAsJavaScriptException(); \
+        return retval; \
+    } \
+}
+
+
+/**
+ * Loads a Buffer into a seed variable
+ * @param {size_t}  arg     Argument number to load
+ * @param {*uint64} seed    Name of seed variable to store value
+ * @param {?}       retval  Value to return from the function
+ */
+#define LOAD_SEED_BUFFER(arg, seed, retval) { \
+    Napi::Buffer<uint8> buf = info[(arg)].As<Napi::Buffer<uint8>>(); \
+    if (buf.Length() != 8) { \
+        Napi::TypeError::New(env, "Buffer seed must have 8 bytes") \
+            .ThrowAsJavaScriptException(); \
+        return retval; \
+    } \
+    memcpy(&(seed), buf.Data(), sizeof(uint64)); \
+}

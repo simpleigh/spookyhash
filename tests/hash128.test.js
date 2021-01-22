@@ -8,8 +8,8 @@
 const { hash128 } = require('..');
 const {
     NOT_BIGINT,
-    NOT_BUFFER,
     NOT_INVALID_BIGINT,
+    NOT_INVALID_BUFFER,
     NOT_NUMBER,
     NOT_OTHER,
 } = require('./fixtures');
@@ -34,8 +34,8 @@ describe('hash128 function', () => {
     });
 
     it.each([
-        ...NOT_BUFFER,
         ...NOT_INVALID_BIGINT,
+        ...NOT_INVALID_BUFFER,
         ...NOT_NUMBER,
         ...NOT_OTHER,
     ])('throws if the first seed is %s', (name, value) => {
@@ -43,8 +43,8 @@ describe('hash128 function', () => {
     });
 
     it.each([
-        ...NOT_BUFFER,
         ...NOT_INVALID_BIGINT,
+        ...NOT_INVALID_BUFFER,
         ...NOT_NUMBER,
         ...NOT_OTHER,
     ])('throws if the second seed is %s', (name, value) => {
@@ -93,6 +93,21 @@ describe('hash128 function', () => {
     it('uses 0 as a default value for both seeds', () => {
         expect(hash128(Buffer.from('test'), 0n, 0n))
             .toEqual(hash128(Buffer.from('test')));
+    });
+
+    it('accepts Buffers as seeds', () => {
+        const message = Buffer.from('test');
+        const withBuffer = hash128(
+            message,
+            Buffer.from([0x75, 0x8b, 0x0d, 0xec, 0xbc, 0xe8, 0x01, 0x7b]),
+            Buffer.from([0x60, 0xac, 0xff, 0xd5, 0xa8, 0x98, 0x6f, 0x0b]),
+        );
+        const withBigInt = hash128(
+            message,
+            8863621439753653109n,
+            824045107744320608n,
+        );
+        expect(withBuffer).toStrictEqual(withBigInt);
     });
 
 });
