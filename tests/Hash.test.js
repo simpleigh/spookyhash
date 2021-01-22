@@ -52,11 +52,11 @@ describe('Hash class', () => {
             ...NOT_NUMBER,
             ...NOT_OTHER,
         ])('throws if the second seed is %s', (name, value) => {
-            expect(() => new Hash(0n, value)).toThrow();
+            expect(() => new Hash(Buffer.alloc(8), value)).toThrow();
         });
 
         it('throws if given too many parameters', () => {
-            expect(() => new Hash(0n, 0n, 'extra')).toThrow();
+            expect(() => new Hash(Buffer.alloc(8), Buffer.alloc(8), 'extra')).toThrow();
         });
     });
 
@@ -139,37 +139,74 @@ describe('Hash class', () => {
         expect(hash1.digest()).not.toEqual(hash2.digest());
     });
 
-    it('hashes to a new value if given a first seed', () => {
-        const hash1 = new Hash(42n);
-        const hash2 = new Hash();
+    describe('Buffer seed', () => {
+        it('hashes to a new value if given a first seed', () => {
+            const seed1 = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
+            const hash1 = new Hash(seed1);
+            const hash2 = new Hash();
 
-        hash1.update(message);
-        hash2.update(message);
+            hash1.update(message);
+            hash2.update(message);
 
-        expect(hash1.digest()).not.toEqual(hash2.digest());
+            expect(hash1.digest()).not.toEqual(hash2.digest());
+        });
+
+        it('hashes to a new value if given a second seed', () => {
+            const seed1 = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
+            const seed2 = Buffer.from([9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf, 0]);
+            const hash1 = new Hash(seed1, seed2);
+            const hash2 = new Hash(seed1);
+
+            hash1.update(message);
+            hash2.update(message);
+
+            expect(hash1.digest()).not.toEqual(hash2.digest());
+        });
+
+        it('uses 0 as a default value for both seeds', () => {
+            const hash1 = new Hash(Buffer.alloc(8), Buffer.alloc(8));
+            const hash2 = new Hash();
+
+            hash1.update(message);
+            hash2.update(message);
+
+            expect(hash1.digest()).toEqual(hash2.digest());
+        });
     });
 
-    it('hashes to a new value if given a second seed', () => {
-        const hash1 = new Hash(42n, 43n);
-        const hash2 = new Hash(42n);
+    describe('BigInt seed', () => {
+        it('hashes to a new value if given a first seed', () => {
+            const hash1 = new Hash(42n);
+            const hash2 = new Hash();
 
-        hash1.update(message);
-        hash2.update(message);
+            hash1.update(message);
+            hash2.update(message);
 
-        expect(hash1.digest()).not.toEqual(hash2.digest());
+            expect(hash1.digest()).not.toEqual(hash2.digest());
+        });
+
+        it('hashes to a new value if given a second seed', () => {
+            const hash1 = new Hash(42n, 43n);
+            const hash2 = new Hash(42n);
+
+            hash1.update(message);
+            hash2.update(message);
+
+            expect(hash1.digest()).not.toEqual(hash2.digest());
+        });
+
+        it('uses 0 as a default value for both seeds', () => {
+            const hash1 = new Hash(0n, 0n);
+            const hash2 = new Hash();
+
+            hash1.update(message);
+            hash2.update(message);
+
+            expect(hash1.digest()).toEqual(hash2.digest());
+        });
     });
 
-    it('uses 0 as a default value for both seeds', () => {
-        const hash1 = new Hash(0n, 0n);
-        const hash2 = new Hash();
-
-        hash1.update(message);
-        hash2.update(message);
-
-        expect(hash1.digest()).toEqual(hash2.digest());
-    });
-
-    it('accepts Buffers as seeds', () => {
+    it('hashes to the same value regardless of seed type', () => {
         const hash1 = new Hash(
             Buffer.from([0x75, 0x8b, 0x0d, 0xec, 0xbc, 0xe8, 0x01, 0x7b]),
             Buffer.from([0x60, 0xac, 0xff, 0xd5, 0xa8, 0x98, 0x6f, 0x0b]),

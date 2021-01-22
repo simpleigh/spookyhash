@@ -50,11 +50,13 @@ describe('hash128 function', () => {
         ...NOT_NUMBER,
         ...NOT_OTHER,
     ])('throws if the second seed is %s', (name, value) => {
-        expect(() => hash128(message, 0n, value)).toThrow();
+        expect(() => hash128(message, Buffer.alloc(8), value)).toThrow();
     });
 
     it('throws if given too many parameters', () => {
-        expect(() => hash128(message, 0n, 0n, 'extra')).toThrow();
+        expect(
+            () => hash128(message, Buffer.alloc(8), Buffer.alloc(8), 'extra'),
+        ).toThrow();
     });
 
     it('returns a buffer of the correct length', () => {
@@ -81,19 +83,41 @@ describe('hash128 function', () => {
         expect(hash128(message)).not.toEqual(hash128(Buffer.from('different')));
     });
 
-    it('hashes to a new value if given a first seed', () => {
-        expect(hash128(message, 42n)).not.toEqual(hash128(message));
+    describe('Buffer seed', () => {
+        it('hashes to a new value if given a first seed', () => {
+            const seed1 = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
+            expect(hash128(message, seed1)).not.toEqual(hash128(message));
+        });
+
+        it('hashes to a new value if given a second seed', () => {
+            const seed1 = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
+            const seed2 = Buffer.from([9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf, 0]);
+            expect(hash128(message, seed1, seed2))
+                .not.toEqual(hash128(message, seed1));
+        });
+
+        it('uses 0 as a default value for both seeds', () => {
+            expect(hash128(message, Buffer.alloc(8), Buffer.alloc(8)))
+                .toEqual(hash128(message));
+        });
     });
 
-    it('hashes to a new value if given a second seed', () => {
-        expect(hash128(message, 42n, 43n)).not.toEqual(hash128(message, 42n));
+    describe('BigInt seed', () => {
+        it('hashes to a new value if given a first seed', () => {
+            expect(hash128(message, 42n)).not.toEqual(hash128(message));
+        });
+
+        it('hashes to a new value if given a second seed', () => {
+            expect(hash128(message, 42n, 43n)).not.toEqual(hash128(message, 42n));
+        });
+
+        it('uses 0 as a default value for both seeds', () => {
+            expect(hash128(message, 0n, 0n)).toEqual(hash128(message));
+        });
+
     });
 
-    it('uses 0 as a default value for both seeds', () => {
-        expect(hash128(message, 0n, 0n)).toEqual(hash128(message));
-    });
-
-    it('accepts Buffers as seeds', () => {
+    it('hashes to the same value regardless of seed type', () => {
         const withBuffer = hash128(
             message,
             Buffer.from([0x75, 0x8b, 0x0d, 0xec, 0xbc, 0xe8, 0x01, 0x7b]),

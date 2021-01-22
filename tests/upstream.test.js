@@ -156,10 +156,13 @@ describe('SpookyHash functions', () => {
             messageLength += 1
         ) {
             const message = PIECES_TEST_MESSAGE.slice(0, messageLength);
-            const hash = new Hash(1n, 2n);
+            const seed1 = Buffer.from([1, 0, 0, 0, 0, 0, 0, 0]);
+            const seed2 = Buffer.from([2, 0, 0, 0, 0, 0, 0, 0]);
+            const hash = new Hash(seed1, seed2);
+
             hash.update(message);
 
-            expect(hash.digest()).toStrictEqual(hash128(message, 1n, 2n));
+            expect(hash.digest()).toStrictEqual(hash128(message, seed1, seed2));
         }
     });
 
@@ -178,12 +181,15 @@ describe('SpookyHash functions', () => {
             ) {
                 const first = message.slice(0, firstLength);
                 const last = message.slice(firstLength);
+                const seed1 = Buffer.from([1, 0, 0, 0, 0, 0, 0, 0]);
+                const seed2 = Buffer.from([2, 0, 0, 0, 0, 0, 0, 0]);
 
-                const hash = new Hash(1n, 2n);
+                const hash = new Hash(seed1, seed2);
                 hash.update(first);
                 hash.update(last);
 
-                expect(hash.digest()).toStrictEqual(hash128(message, 1n, 2n));
+                expect(hash.digest())
+                    .toStrictEqual(hash128(message, seed1, seed2));
             }
         }
     });

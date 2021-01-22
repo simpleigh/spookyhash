@@ -45,7 +45,7 @@ describe('hash64 function', () => {
     });
 
     it('throws if given too many parameters', () => {
-        expect(() => hash64(message, 0n, 'extra')).toThrow();
+        expect(() => hash64(message, Buffer.alloc(8), 'extra')).toThrow();
     });
 
     it('returns a BigInt', () => {
@@ -60,15 +60,28 @@ describe('hash64 function', () => {
         expect(hash64(message)).not.toEqual(hash64(Buffer.from('different')));
     });
 
-    it('hashes to a new value if given a seed', () => {
-        expect(hash64(message, 42n)).not.toEqual(hash64(message));
+    describe('Buffer seed', () => {
+        it('hashes to a new value if given a seed', () => {
+            expect(hash64(message, Buffer.from([1, 2, 3, 4, 5, 6, 7, 8])))
+                .not.toEqual(hash64(message));
+        });
+
+        it('uses 0 as a default value for the seed', () => {
+            expect(hash64(message, Buffer.alloc(8))).toEqual(hash64(message));
+        });
     });
 
-    it('uses 0 as a default value for the seed', () => {
-        expect(hash64(message, 0n)).toEqual(hash64(message));
+    describe('BigInt seed', () => {
+        it('hashes to a new value if given a seed', () => {
+            expect(hash64(message, 42n)).not.toEqual(hash64(message));
+        });
+
+        it('uses 0 as a default value for the seed', () => {
+            expect(hash64(message, 0n)).toEqual(hash64(message));
+        });
     });
 
-    it('accepts Buffers as seeds', () => {
+    it('hashes to the same value regardless of seed type', () => {
         const withBuffer = hash64(
             message,
             Buffer.from([0x75, 0x8b, 0x0d, 0xec, 0xbc, 0xe8, 0x01, 0x7b]),
