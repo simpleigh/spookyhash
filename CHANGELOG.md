@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.0
+
+This release fixes #2 (Cannot build library on Node 10.20) by dropping support
+for `BigInt` values on early versions of Node.js. This pushes support back to
+version 10.16 (earlier versions compile but the testsuite fails).
+
+As `BigInt` values may not be available we now allow seed parameters to be
+passed as 8-byte `Buffer` values instead.
+
+Other improvements:
+
+* sundry code tidying (particularly DRYing up parameter validation)
+
 ## 1.1.0
 
 This release fixes #1 (Cannot build library on MacOS).
