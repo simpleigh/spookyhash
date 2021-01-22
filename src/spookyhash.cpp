@@ -16,17 +16,9 @@ Napi::Value Hash128(const Napi::CallbackInfo& info) {
     uint64 hash1 = 0;
     uint64 hash2 = 0;
 
-    if (info.Length() < 1 || info.Length() > 3) {
-        Napi::TypeError::New(env, "Wrong number of arguments")
-            .ThrowAsJavaScriptException();
-        return env.Null();
-    }
+    CHECK_ARGUMENT_COUNT(1, 3, env.Null());
 
-    if (!info[0].IsBuffer()) {
-        Napi::TypeError::New(env, "message must be a Buffer")
-            .ThrowAsJavaScriptException();
-        return env.Null();
-    }
+    CHECK_MESSAGE(env.Null());
 
     if (info.Length() >= 2) {
         if (!info[1].IsBigInt()) {
@@ -82,17 +74,9 @@ Napi::Value Hash64(const Napi::CallbackInfo& info) {
     bool lossless;
     uint64 seed = 0;
 
-    if (info.Length() < 1 || info.Length() > 2) {
-        Napi::TypeError::New(env, "Wrong number of arguments")
-            .ThrowAsJavaScriptException();
-        return env.Null();
-    }
+    CHECK_ARGUMENT_COUNT(1, 2, env.Null());
 
-    if (!info[0].IsBuffer()) {
-        Napi::TypeError::New(env, "message must be a Buffer")
-            .ThrowAsJavaScriptException();
-        return env.Null();
-    }
+    CHECK_MESSAGE(env.Null());
 
     if (info.Length() >= 2) {
         if (!info[1].IsBigInt()) {
@@ -127,17 +111,9 @@ Napi::Value Hash32(const Napi::CallbackInfo& info) {
 
     uint32 seed = 0;
 
-    if (info.Length() < 1 || info.Length() > 2) {
-        Napi::TypeError::New(env, "Wrong number of arguments")
-            .ThrowAsJavaScriptException();
-        return env.Null();
-    }
+    CHECK_ARGUMENT_COUNT(1, 2, env.Null());
 
-    if (!info[0].IsBuffer()) {
-        Napi::TypeError::New(env, "message must be a Buffer")
-            .ThrowAsJavaScriptException();
-        return env.Null();
-    }
+    CHECK_MESSAGE(env.Null());
 
     if (info.Length() >= 2) {
         if (!info[1].IsNumber()) {

@@ -33,11 +33,7 @@ Hash::Hash(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Hash>(info) {
     uint64 seed1 = 0;
     uint64 seed2 = 0;
 
-    if (info.Length() > 2) {
-        Napi::TypeError::New(env, "Wrong number of arguments")
-            .ThrowAsJavaScriptException();
-        return;
-    }
+    CHECK_ARGUMENT_COUNT(0, 2, );
 
     if (info.Length() >= 1) {
         if (!info[0].IsBigInt()) {
@@ -78,11 +74,7 @@ Hash::Hash(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Hash>(info) {
 Napi::Value Hash::Digest(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
-    if (info.Length() != 0) {
-        Napi::TypeError::New(env, "Wrong number of arguments")
-            .ThrowAsJavaScriptException();
-        return env.Null();
-    }
+    CHECK_ARGUMENT_COUNT(0, 0, env.Null());
 
     uint64 hash1;
     uint64 hash2;
@@ -101,17 +93,9 @@ Napi::Value Hash::Digest(const Napi::CallbackInfo& info) {
 void Hash::Update(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
 
-    if (info.Length() != 1) {
-        Napi::TypeError::New(env, "Wrong number of arguments")
-            .ThrowAsJavaScriptException();
-        return;
-    }
+    CHECK_ARGUMENT_COUNT(1, 1, );
 
-    if (!info[0].IsBuffer()) {
-        Napi::TypeError::New(env, "message must be a Buffer")
-            .ThrowAsJavaScriptException();
-        return;
-    }
+    CHECK_MESSAGE();
 
     m_state.Update(
         info[0].As<Napi::Buffer<uint8>>().Data(),
