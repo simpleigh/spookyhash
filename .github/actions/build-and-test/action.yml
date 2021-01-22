@@ -12,5 +12,5 @@ runs:
       shell: bash
 
     - name: Run tests
-      run: yarn jest
+      run: yarn test
       shell: bash
