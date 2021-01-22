@@ -117,7 +117,7 @@ Napi::Value Hash32(const Napi::CallbackInfo& info) {
 
     if (info.Length() >= 2) {
         if (!info[1].IsNumber()) {
-            Napi::TypeError::New(env, "seed must be a BigInt")
+            Napi::TypeError::New(env, "seed must be a number")
                 .ThrowAsJavaScriptException();
             return env.Null();
         }
