@@ -5,6 +5,7 @@
 [![Downloads](https://img.shields.io/npm/dt/spookyhash.svg)](https://www.npmjs.com/package/spookyhash)
 ![Node](https://img.shields.io/node/v-lts/spookyhash)
 [![Issues](https://img.shields.io/github/issues/simpleigh/spookyhash.svg)](https://github.com/simpleigh/spookyhash/issues)
+[![Known Vulnerabilities](https://snyk.io/test/github/simpleigh/spookyhash/badge.svg?targetFile=package.json)](https://snyk.io/test/github/simpleigh/spookyhash?targetFile=package.json)
 
 Node bindings for SpookyHash V2.
 
