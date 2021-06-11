@@ -19,7 +19,7 @@
   "homepage": "https://github.com/simpleigh/spookyhash",
   "license": "MIT",
   "engines": {
-    "node": ">=10.16"
+    "node": ">=10"
   },
   "scripts": {
     "build": "node-gyp rebuild",

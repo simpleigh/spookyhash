@@ -5,7 +5,7 @@
  * @copyright Copyright 2020 Leigh Simpson. All rights reserved.
  */
 
-const { hasBigInt, hash64 } = require('..');
+const { hash64 } = require('..');
 const {
     NOT_BIGINT,
     NOT_INVALID_BIGINT,
@@ -13,12 +13,6 @@ const {
     NOT_NUMBER,
     NOT_OTHER,
 } = require('./fixtures');
-
-
-if (!hasBigInt) {
-    describe = xdescribe;  // skip all tests; hash64 not available
-}
-
 
 describe('hash64 function', () => {
 

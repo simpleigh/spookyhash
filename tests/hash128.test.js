@@ -5,7 +5,7 @@
  * @copyright Copyright 2020 Leigh Simpson. All rights reserved.
  */
 
-const { hasBigInt, hash128 } = require('..');
+const { hash128 } = require('..');
 const {
     NOT_BIGINT,
     NOT_INVALID_BIGINT,
@@ -102,35 +102,33 @@ describe('hash128 function', () => {
         });
     });
 
-    if (hasBigInt) {
-        describe('BigInt seed', () => {
-            it('hashes to a new value if given a first seed', () => {
-                expect(hash128(message, 42n)).not.toEqual(hash128(message));
-            });
-
-            it('hashes to a new value if given a second seed', () => {
-                expect(hash128(message, 42n, 43n)).not.toEqual(hash128(message, 42n));
-            });
-
-            it('uses 0 as a default value for both seeds', () => {
-                expect(hash128(message, 0n, 0n)).toEqual(hash128(message));
-            });
-
+    describe('BigInt seed', () => {
+        it('hashes to a new value if given a first seed', () => {
+            expect(hash128(message, 42n)).not.toEqual(hash128(message));
         });
 
-        it('hashes to the same value regardless of seed type', () => {
-            const withBuffer = hash128(
-                message,
-                Buffer.from([0x75, 0x8b, 0x0d, 0xec, 0xbc, 0xe8, 0x01, 0x7b]),
-                Buffer.from([0x60, 0xac, 0xff, 0xd5, 0xa8, 0x98, 0x6f, 0x0b]),
-            );
-            const withBigInt = hash128(
-                message,
-                8863621439753653109n,
-                824045107744320608n,
-            );
-            expect(withBuffer).toStrictEqual(withBigInt);
+        it('hashes to a new value if given a second seed', () => {
+            expect(hash128(message, 42n, 43n)).not.toEqual(hash128(message, 42n));
         });
-    }
+
+        it('uses 0 as a default value for both seeds', () => {
+            expect(hash128(message, 0n, 0n)).toEqual(hash128(message));
+        });
+
+    });
+
+    it('hashes to the same value regardless of seed type', () => {
+        const withBuffer = hash128(
+            message,
+            Buffer.from([0x75, 0x8b, 0x0d, 0xec, 0xbc, 0xe8, 0x01, 0x7b]),
+            Buffer.from([0x60, 0xac, 0xff, 0xd5, 0xa8, 0x98, 0x6f, 0x0b]),
+        );
+        const withBigInt = hash128(
+            message,
+            8863621439753653109n,
+            824045107744320608n,
+        );
+        expect(withBuffer).toStrictEqual(withBigInt);
+    });
 
 });
