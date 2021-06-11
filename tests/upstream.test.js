@@ -10,7 +10,7 @@
  * @copyright Copyright 2020 Leigh Simpson. All rights reserved.
  */
 
-const { hasBigInt, Hash, hash32, hash64, hash128 } = require('..');
+const { Hash, hash32, hash64, hash128 } = require('..');
 
 describe('SpookyHash functions', () => {
 
@@ -127,7 +127,7 @@ describe('SpookyHash functions', () => {
          */
         const computeHashes = (message) => [
             hash32(message),
-            hasBigInt ? hash64(message) : null,
+            hash64(message),
             hash128(message),
         ];
 

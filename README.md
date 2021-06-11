@@ -13,13 +13,11 @@ Node bindings for SpookyHash V2.
 
 * [`spookyhash`](#spookyhash-1)
   * [Similar projects](#similar-projects)
-  * [Version support](#version-support)
   * [Class: `Hash`](#class-hash)
     * [`new Hash([seed1[, seed2]])`](#new-hashseed1-seed2)
     * [`hash.digest()`](#hashdigest)
     * [`hash.update(message)`](#hashupdatemessage)
   * [`spookyhash` module methods and properties](#spookyhash-module-methods-and-properties)
-    * [`spookyhash.hasBigInt`](#spookyhashhasbigint)
     * [`spookyhash.hash128(message[, seed1[, seed2]])`](#spookyhashhash128message-seed1-seed2)
     * [`spookyhash.hash64(message[, seed])`](#spookyhashhash64message-seed)
     * [`spookyhash.hash32(message[, seed])`](#spookyhashhash32message-seed)
@@ -69,18 +67,6 @@ From 2021-04-30 it will not run on any supported version of Node.
 
 I spent a little time attempting to upgrade that code, but decided it would be
 easier to build new bindings using N-API rather than learn the v8 API!
-
-### Version support
-
-This project supports Node.js versions 10.16 onwards, 12, 14 and 15.
-[`<BigInt>`] values are only supported on version 10.21 or greater;
-on earlier versions:
-
-* seeds must be passed as `Buffer` values rather than `BigInt`
-* the `hash64()` method is unavailable (it should return a `BigInt`)
-
-This can be checked at runtime by reading the value of
-[`spookyhash.hasBigInt`](#spookyhashhasbigint).
 
 ## Class: `Hash`
 
@@ -143,11 +129,6 @@ Updates the hash content with the given `message`.
 This can be called many times with new data as it is streamed.
 
 ## `spookyhash` module methods and properties
-
-### `spookyhash.hasBigInt`
-
-Whether or not [`<BigInt>`] values are supported while running on this version
-of Node.js (see [Version support](#version-support) above).
 
 ### `spookyhash.hash128(message[, seed1[, seed2]])`
 
