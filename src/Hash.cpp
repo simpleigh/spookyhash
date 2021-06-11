@@ -16,11 +16,10 @@ Napi::Object Hash::Init(Napi::Env env, Napi::Object exports) {
     });
 
     Napi::FunctionReference *constructor = new Napi::FunctionReference();
-
     *constructor = Napi::Persistent(func);
-    exports.Set("Hash", func);
-
     env.SetInstanceData<Napi::FunctionReference>(constructor);
+
+    exports.Set("Hash", func);
 
     return exports;
 }
