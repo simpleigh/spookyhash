@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.0
+
+This release updates the supported versions of Node.
+
+Breaking changes:
+
+* Node 10 is no longer supported
+* Node 15 is no longer supported
+
 ## 1.2.1
 
 This patch release bumps dependency versions in order to fix a security issue.
