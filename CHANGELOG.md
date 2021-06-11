@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+This patch release bumps dependency versions in order to fix a security issue.
+
 ## 1.2.0
 
 This release fixes #2 (Cannot build library on Node 10.20) by dropping support
