@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "node-gyp rebuild",
-    "clean": "rm -r build include",
+    "clean": "rm -rf build include",
     "headers": "node-gyp install --devdir include",
     "test": "jest"
   },
