@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.0
+
+This release updates the supported versions of Node.
+
+Breaking changes:
+
+* Node 12 is no longer supported
+* Node 14 is no longer supported
+
 ## 2.0.0
 
 This release updates the supported versions of Node.
