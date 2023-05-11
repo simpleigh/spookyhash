@@ -31,10 +31,12 @@ SpookyHash was devised by Bob Jenkins and is described as
 
 [SpookyHash]: http://burtleburtle.net/bob/hash/spooky.html
 
-Use `require('spookyhash')` to access this module.
-
 ```javascript
+// Either:
 const spookyhash = require('spookyhash');
+// ... or:
+import spookyhash from 'spookyhash';
+// (but note that e.g. `import { Hash } from 'spookyhash';` doesn't work)
 
 const secret = Buffer.from('abdcdefg');
 
